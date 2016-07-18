@@ -11,7 +11,7 @@ output: html_document
 ```{r}
 library(Hmisc)
 demographics <- sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2013-2014/DEMO_H.XPT")
-# copy the syntax used above to import the other dataset chosen by the class
+# copy the syntax used above to import the other dataset: Taste and Smell, file called "CSX_H.XPT"
 
 ```
 

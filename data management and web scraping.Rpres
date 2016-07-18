@@ -22,7 +22,7 @@ Case Study 1: NHANES
 ```{r, message=FALSE, results='hide'}
 library(Hmisc)
 demographics <- sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2013-2014/DEMO_H.XPT")
-# other.dataset <- sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2013-2014/?????")
+taste.smell <- sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2013-2014/CSX_H.XPT")
 ```
 
 Clean Up, Clean Up, Everybody Everywhere...
