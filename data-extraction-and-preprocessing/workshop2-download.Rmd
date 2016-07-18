@@ -22,6 +22,7 @@ demographics <- sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2013-2014/DEMO_H.X
 4. Make sure numbers are numbers and factors are factors
 
 ```{r}
+library(plyr)
 library(dplyr)
 # this is step 1; remember to rename the variables you select to something you'll remember
 demo <- demographics %>% 
@@ -41,7 +42,13 @@ Are all of your factors reading as factors or are some of them numbers?
 
 ```{r}
 # try using different dplyr functions here
+# mutate
 
+# filter
+
+# group_by
+
+# summarize
 
 ```
 

@@ -32,12 +32,6 @@ Clean Up, Clean Up, Everybody Everywhere...
 3. Look for out-of-range data: why would a living person have a pulse of 0 bpm?
 4. Make sure numbers are numbers and factors are factors
 
-Case Study 1: NHANES
-========================================================
-- Our first step is to decide which variables we want to use
-- We probably want to investigate a relationship, so we should choose a predictor variable and a response variable
-- Now we look at the codebook to figure out what these have been named
-
 Introducing dplyr!
 ========================================================
 - `dplyr` works like magic
@@ -77,12 +71,19 @@ seq(1:10) %>%
 
 Back to NHANES
 ========================================================
+- Our first step is to decide which variables we want to use
+- We probably want to investigate a relationship, so we should choose a predictor variable and a response variable
+- Now we look at the codebook to figure out what these have been named
+
+Back to NHANES
+========================================================
 - Let's select the variables we decided to work with
 - We can rename them at the same time
 ```{r}
+library(plyr)
 library(dplyr)
 demo <- demographics %>% 
-  select() 
+  select(id=seqn,gender=riagendr,age=ridageyr) 
 ```
 - If we didn't want to select only a specific number of columns, we would use `rename()`
 
@@ -106,16 +107,6 @@ Back to Cleaning!
   - justify every decision you make
   - don't overwrite your original data
 
-Select : Columns :: Filter : Rows
-========================================================
-- `filter()` allows you to pick rows that have a specific value inside a column
-- For example, let's say we want to pick all of the women
-```{r, eval=FALSE}
-women <- demo %>% 
-  filter(gender=="female")
-```
-- You can use the >, <, ==, >=, and <= operators to `filter()` rows
-
 Mutants!
 ========================================================
 - `mutate()` allows us to add new columns
@@ -123,27 +114,66 @@ Mutants!
 - for example, changing kg to lbs because this is AMERICA
 - `mutate_each()`: multiple columns
 
-Grouping
+Mutants!
 ========================================================
-- Let's say we're not happy just looking at the women
-- Now we want to compare men and women
-- `group_by()` allows us to group by gender
+```{r}
+demo <- demographics %>% 
+  select(id=seqn,gender=riagendr,age=ridageyr) %>% 
+  mutate(gender=revalue(as.factor(gender), c("1"="male","2"="female")))
+summary(demo)
+```
 
-```{r, eval=FALSE}
-group <- demo %>% 
-  group_by(gender)
+
+Select : Columns :: Filter : Rows
+========================================================
+- `filter()` allows you to pick rows that have a specific value inside a column
+- For example, let's say we want to pick all of the women
+```{r}
+women <- demo %>% 
+  filter(gender=="female")
+```
+- You can use the >, <, ==, >=, and <= operators to `filter()` rows
+```{r}
+old.farts <- demo %>% 
+  filter(age>75)
 ```
 
 Summarize
 ========================================================
 - When we want to get one number, we use `summarize()`
 - Think of functions like `mean()`
-- For example, now that we have the data grouped, we can compare the `[variable]` between men and women
-```{r, eval=F}
-result <- group %>% 
-  summarize(mean)
+```{r}
+demo %>% 
+  summarize(mean.age = mean(age))
 ```
 - `summarize_each()`: multiple columns
+
+
+Grouping
+========================================================
+```{r}
+group <- demo %>%
+  group_by(gender)
+head(group)
+```
+
+Arrange
+========================================================
+```{r}
+arrange <- demo %>% 
+  arrange(gender)
+head(arrange)
+```
+
+
+Divide and Conquer!
+========================================================
+```{r}
+demo %>%
+  group_by(gender) %>%  
+  summarize(mean.age = mean(age))
+```
+
 
 Freebie: Summarize function examples
 ========================================================
@@ -165,6 +195,42 @@ Why did we download two datasets?
 - There are different joins depending on how you want to do it
 - I look them up every time: https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
 
+But first!
+========================================================
+- 10 minutes to clean the second dataset!
+- Remember to:
+  - select just the variables you want (rename probably)
+  - look for missing values
+  - check your factors
+
+```{r, echo=FALSE}
+ts <- taste.smell %>% 
+  select(id=seqn,runny=csq260n,choc=csxchood) %>% 
+  mutate(runny=replace(runny,is.na(runny),0) %>% 
+           as.factor %>% 
+           revalue(c("1"="yes","0"="no")),
+         choc=revalue(as.factor(choc),c("1"="Lemon", "2"="Chocolate", 
+                                        "3"="Smoke","4"="Black pepper")))
+```
+
+Left join!
+========================================================
+```{r}
+full.dat <- left_join(demo, ts, by = "id") # or your df name
+```
+- Optional `by` statement
+- Can use more than one `by` variables as well
+  - `by = c("id","age")`
+
+Have fun!
+========================================================
+- Find some interesting stuff, please
+- Take a snack break if you like
+- Let us know what you find!
+  - Do old people smell funny?
+
+Web Scraping
+========================================================
 
 Case Study 2: NBA
 ========================================================
