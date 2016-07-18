@@ -107,6 +107,9 @@ Back to Cleaning!
   - justify every decision you make
   - don't overwrite your original data
 
+========================================================
+<center><img src="http://imgs.xkcd.com/comics/genetic_testing.png"/></center> 
+
 Mutants!
 ========================================================
 - `mutate()` allows us to add new columns
@@ -231,6 +234,12 @@ Have fun!
 
 Web Scraping
 ========================================================
+- Refers to extracting information from websites
+- Really easy to do in R with the help of some packages
+  - `rvest`
+  - `XML`
+- 
+
 
 Case Study 2: NBA
 ========================================================
