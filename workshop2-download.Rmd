@@ -1,0 +1,55 @@
+---
+title: "Data Management and Web Scraping Workshop"
+author: "YOUR NAME HERE"
+date: "July 19, 2016"
+output: html_document
+---
+
+# Case Study 1: NHANES
+- In order to read in SAS files, we have to use a function from `Hmisc` called `sasxport.get`. 
+
+```{r}
+library(Hmisc)
+demographics <- sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2013-2014/DEMO_H.XPT")
+# copy the syntax used above to import the other dataset chosen by the class
+
+```
+
+## Clean Up, Clean Up, Everybody Everywhere...
+1. Decide which variables to use
+2. Look for missing data: why are they missing and is this a problem?
+3. Look for out-of-range data: why would a living person have a pulse of 0 bpm?
+4. Make sure numbers are numbers and factors are factors
+
+```{r}
+library(dplyr)
+# this is step 1; remember to rename the variables you select to something you'll remember
+demo <- demographics %>% 
+  select()
+```
+
+```{r}
+# look for missing data, out-of-range data and data using summary
+summary()
+```
+
+Is anything missing? Why? Is it a problem?
+Is anything out-of-range? Is it an error or is the data real, yet confusing?
+Are all of your factors reading as factors or are some of them numbers?
+
+## More dplyr!
+
+```{r}
+# try using different dplyr functions here
+
+
+```
+
+## Joining datasets
+https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
+
+```{r}
+
+```
+
+# Case Study 2: NBA

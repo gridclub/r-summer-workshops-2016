@@ -1,0 +1,230 @@
+---
+title: "Intro to R"
+author: "Emma Kearney and Sandra Castro-Pearson"
+date: "June 23, 2016"
+output: pdf_document
+---
+
+1. Download,install R and RStudio
+2. Why R? 
+3. Orientation with RStudio
+4. Basic operations in the console  
+
+## Basics and Data Types
+
+R works like a calculator
+```{r}
+7+11
+42*6
+90/3
+2^3
+```
+
+Creating vectors - to store data and easily manipulate
+```{r cache = T}
+myVector <- c(1,2,3,4,5)
+# c means "concatenate", or group together
+
+second_vec <- c(1:10, 50:70)
+fancy_vec <- seq(0, 100, 2)
+seq()
+another_vec <- rep(1:10, 2)
+
+# Vectors are one-dimensional. We can perform mathematical operations on them - the operation is applied to the entire vector 
+myVector*2
+wow <- fancy_vec/2
+```
+
+R can perform operations between vectors of two different lengths - it will recycle the shorter vector to match the length of the longer one. 
+```{r cache = T}
+
+a <- c(1:10)
+b <- rep(2, 5)
+a*b
+```
+
+
+Data can be stored in multiple dimensions. Data frames and matrices are both 2D. Matrices must be all the same type of data, whereas data frames can hold different data types. 
+
+```{r cache = T}
+
+myVector2 <- myVector^2
+myVector3 <- myVector^3
+
+my_mat <- cbind(myVector, myVector2, myVector3)
+my_mat
+View(my_mat)
+
+my_mat_t <- rbind(myVector, myVector2, myVector3)
+my_mat_t
+t(my_mat)
+
+my_mat2<-matrix(rep(1:10, 5), ncol=5, byrow = T)
+my_mat2
+
+# How is R reading this data?
+class(my_mat)
+str(my_mat)
+
+words <- c("dog", "bunny", "fox", "whale", "elephant")
+my_mat <- cbind(my_mat, words)
+str(my_mat)
+# All characters
+
+words <- c("dog", "bunny", "fox", "whale", "elephant", "duck")
+my_mat <- cbind(my_mat, words)
+# To use cbind, vectors must be the same length (or dimension)
+my_mat
+```
+
+If you have two matrices that are different sizes, R will multiply the matrices.
+```{r cache = T}
+
+my_mat_t*myVector
+
+```
+
+Most users of R utilize Data Frames which are made up of vectors. Unlike matrices Data frames can have vectors of different classes. 
+``` {r cache = T}
+mydf <- as.data.frame(my_mat_t)
+class(mydf)
+
+words <- c("dog", "bunny", "fox")
+mydf2 <- data.frame(mydf, words, stringsAsFactors=FALSE)
+str(mydf2)
+
+mydf2$words
+mydf2[,6]
+mydf2[1,]
+mydf2[1:3,1:2]
+
+mean(mydf2$V2)
+
+summary(mydf2)
+dim(mydf2)
+nrow(mydf2)
+ncol(mydf2)
+```
+
+## R's base plotting 
+Not the coolest plots - but R is known for making great visualizations of data! 
+Packages for cool viz - will learn more about this in visualization workshop.
+
+[FEV DATA]
+Description of variables in the FEV dataset
+age: Age in years 
+fev: Maximum forced expiratory volume in one second 
+height: Height in inches 
+sex: 'male' or 'female' 
+smoker: 'current smoker' or 'non-current smoker' 
+
+```{r cache=T}
+library(Hmisc)
+getHdata(FEV)
+dev.off()
+hist(FEV$height)
+boxplot(FEV$height)
+plot(x=FEV$age, y=FEV$fev)
+```
+
+[EXAMPLE]
+Find the mean and median for the variable fev in the FEV data set.
+Make scatterplot of y=fev vs. x=height.
+Find the class for the variables height, sex and smoke.
+
+## Lists 
+Lists can be as simple as a vector, but can also store multiple vectors, matrices and data frames or combinations of them.
+
+``` {r cache = T}
+mylist<-list(mydf, my_mat2, myVector3)
+mylist[[1]]
+
+mylist2<-list()
+mylist2[[1]]<-mydf2
+mylist2[[2]]<-my_mat
+mylist2[[3]]<-myVector
+mylist2
+
+summary(mylist2)
+str(mylist2)
+
+summary(mylist2[[1]])
+str(mylist2[[1]])
+
+```
+## Arrays 
+Not used very often, and when it is, usually for 3-dimensional datasets
+
+Ex: Longitude, latitude, time - a "brick" of data 
+
+## Functions
+If you are going to be repeating the same code many times, you can write a function instead. 
+Structure of a function in R
+```{r }
+nameoffunction <- function(parameters) 
+{
+  #commands to be performed within function
+}
+```
+
+
+
+Very basic example
+A function that will convert a decimal format into a percentage format with % sign and keep 1 decimal.
+
+```{r cache=T}
+#this task is a one-liner if we only need to do it once
+	percent<-paste(round(0.599*100, digits=1), "%", sep = "")
+
+#but if we have to do it 20 times a function is much better
+	dec2percent<-function(number)
+	 {
+		result<-paste(round(number*100, digits=1), "%", sep = "")
+		return (result)
+	}
+	
+	dec2percent(0.599)
+	dec2percent(0.252)
+  dec2percent(0.7249)
+  
+  for(i in seq(.1, .20, 0.02))
+  {
+    P <- dec2percent(i)
+    print(P)
+    
+  }
+```
+
+
+Use a function to convert the height variable in the FEV data from inches to feet. 
+Plot y=fev v. x=height in feet.
+
+## Packages!
+group of pre-made functions that serve specific purpose
+
+CRAN for package documentation
+
+CRAN task view for first selecting topic, then suggested packages 
+
+install.packages("swirl")
+library(swirl)
+
+Some cool packages
+knitr - great for making nice-looking reports (have to use in markdown ) - knitting options 
+swirl - excellent resource for learning r interactively
+plyr - hugely important and ubiquitous package. Will learn more about this in next workshop.
+
+Example using knitr
+
+[ON YOUR OWN]
+
+Find dataset using the command - datasets::mtcars.
+Use the help console to see a description of the variables
+Assign this data set the name cardata
+The variable wt gives us weight in lb/1000. Convert this variable to be the weigth in lbs.
+Plot y=mpg vs. x=wt (in lbs not lbs/1000)
+
+Make a new data frame named carsubset that only includes the variables mpg, cyl and hp for the first 10 cars.
+Find the mean mpg for the carsubset data.
+Make a histogram for cylinders. 
+In R markdown create a pdf document with the carsubset dataframe displayed as a nice table (use kable function in knitr package).

@@ -1,0 +1,31 @@
+---
+title: "For 7/12 presentation"
+author: "Sandra Castro-Pearson"
+date: "June 30, 2016"
+output: pdf_document
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+
+NAME<-c("hospstay","pltct","bwt","gest","delivery","sex","magsulf","meth","toc","pda")
+
+DESCRIPTION<-c("Number of Days in hospital","Platelet Count","Birth weight (grams)",
+                "Gestational age (weeks)", "Type of Delivery (Vaginal/Abdominal)",
+                "Sex (Female/Male)","Mother treated with MgSO4 (0=No, 1=Yes)", 
+                "Mother treated with beta-methasone (0=No, 1=Yes)", 
+                "Tocolysis - mother treated with beta-adrenergic drug (0=No, 1=Yes)",
+                "Patent ductus arteriosus detected (0=No, 1=Yes)")
+
+TYPE<-c("continuous","continuous","continuous","continuous", "factor", "factor", "binary", "binary","binary","binary")
+
+reference2<-data.frame(NAME,TYPE,DESCRIPTION)
+
+kable(reference2,digits = 2)
+```
+
+R can be used to write math using latex format  
+$x+y=7$  
+$y = \beta_0 + \beta_1x_1 + \epsilon$
+
+

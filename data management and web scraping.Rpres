@@ -1,0 +1,176 @@
+data management and web scraping
+========================================================
+author: katie leap and stephen lauer
+date: 7/19/16
+
+Data Management
+========================================================
+
+- Actually refers to a lot of things
+  - some of them very technical with names like "data architecture"
+- We're using it just to refer to managing **data quality**
+  - cleaning 
+  - processing
+- Additionally, sometimes data comes to you as a giant file, but you don't need all of it
+  - R makes it easy to filter and select just the data you're interested in
+
+Case Study 1: NHANES
+========================================================
+- We'll get started with a public health dataset that we're going to find online right now
+- http://wwwn.cdc.gov/Nchs/Nhanes/Search/Nhanes13_14.aspx
+
+```{r, message=FALSE, results='hide'}
+library(Hmisc)
+demographics <- sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2013-2014/DEMO_H.XPT")
+# other.dataset <- sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2013-2014/?????")
+```
+
+Clean Up, Clean Up, Everybody Everywhere...
+========================================================
+1. Decide which variables to use
+2. Look for missing data: why are they missing and is this a problem?
+3. Look for out-of-range data: why would a living person have a pulse of 0 bpm?
+4. Make sure numbers are numbers and factors are factors
+
+Case Study 1: NHANES
+========================================================
+- Our first step is to decide which variables we want to use
+- We probably want to investigate a relationship, so we should choose a predictor variable and a response variable
+- Now we look at the codebook to figure out what these have been named
+
+Introducing dplyr!
+========================================================
+- `dplyr` works like magic
+- We're going to look at the following functions in `dplyr`:
+  - `select()`
+  - `rename()`
+  - `filter()`
+  - `mutate()`
+  - `group_by()`
+  - `summarize()`
+  - `arrange()`
+- They all do what it sounds like they do
+
+But First!
+========================================================
+
+- the pipe!
+- **%>%**
+- this handy little thing comes from the `magrittr` package
+- it makes code a million times more readable
+- keyboard shortcut: **cmd-shift-M** (for **m**agrittr)
+
+%>% in action!
+========================================================
+```{r}
+library(magrittr) # or dplyr
+
+## confusing ##
+mean(seq_len(sum(seq(1:10))))
+
+## clear ##
+seq(1:10) %>% 
+  sum %>%
+  seq_len %>% 
+  mean
+```
+
+Back to NHANES
+========================================================
+- Let's select the variables we decided to work with
+- We can rename them at the same time
+```{r}
+library(dplyr)
+demo <- demographics %>% 
+  select() 
+```
+- If we didn't want to select only a specific number of columns, we would use `rename()`
+
+Freebie: helper functions
+========================================================
+- `contains()`
+- `ends_with()`
+- `everything()`
+- `matches()`
+- `num_range("x", 1:5)`: columns named x1, x2, x3, x4, x5.
+- `one_of()`
+- `starts_with()`
+
+Back to Cleaning!
+========================================================
+- `summary()` provides summary statistics
+- this is a one-stop-shop for missing data, out-of-range data and checking that numbers are numbers and factors are factors
+- however magic `dplyr` is, data management relies on your brain
+  - be thorough
+  - document what you do
+  - justify every decision you make
+  - don't overwrite your original data
+
+Select : Columns :: Filter : Rows
+========================================================
+- `filter()` allows you to pick rows that have a specific value inside a column
+- For example, let's say we want to pick all of the women
+```{r, eval=FALSE}
+women <- demo %>% 
+  filter(gender=="female")
+```
+- You can use the >, <, ==, >=, and <= operators to `filter()` rows
+
+Mutants!
+========================================================
+- `mutate()` allows us to add new columns
+- usually we do this because we have changed something about another column and want to preserve both
+- for example, changing kg to lbs because this is AMERICA
+- `mutate_each()`: multiple columns
+
+Grouping
+========================================================
+- Let's say we're not happy just looking at the women
+- Now we want to compare men and women
+- `group_by()` allows us to group by gender
+
+```{r, eval=FALSE}
+group <- demo %>% 
+  group_by(gender)
+```
+
+Summarize
+========================================================
+- When we want to get one number, we use `summarize()`
+- Think of functions like `mean()`
+- For example, now that we have the data grouped, we can compare the `[variable]` between men and women
+```{r, eval=F}
+result <- group %>% 
+  summarize(mean)
+```
+- `summarize_each()`: multiple columns
+
+Freebie: Summarize function examples
+========================================================
+- `dplyr` specific:
+  - `first`: First value of a vector.
+  - `last`: Last value of a vector.
+  - `nth`: Nth value of a vector.
+  - `n`: # of values in a vector.
+  - `n_distinct`: # of distinct values in a vector.
+- Other functions:
+  - `IQR`
+  - `min`, `max`
+  - `mean`, `median`
+  - `var`, `sd`
+
+Why did we download two datasets?
+========================================================
+- Because we can join them!
+- There are different joins depending on how you want to do it
+- I look them up every time: https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
+
+
+Case Study 2: NBA
+========================================================
+- Celtics
+
+Introducing rvest!
+========================================================
+- `rvest` works like magic
+
