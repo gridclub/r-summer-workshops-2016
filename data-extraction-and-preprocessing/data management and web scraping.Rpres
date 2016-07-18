@@ -3,6 +3,15 @@ data management and web scraping
 author: katie leap and stephen lauer
 date: 7/19/16
 
+Data Extraction
+========================================================
+- With R, this isn't really a thing
+- `read.csv` will read in csv files
+  - very easy syntax, used most frequently
+- In this workshop, we'll cover two other methods
+  - Importing SAS files
+  - Scraping HTML tables from the internet
+
 Data Management
 ========================================================
 
@@ -238,14 +247,11 @@ Web Scraping
 - Really easy to do in R with the help of some packages
   - `rvest`
   - `XML`
-- 
+- Data needs to be non-reactive (aka not javascript or flash (yuck))
 
 
 Case Study 2: NBA
 ========================================================
-- Celtics
+- http://www.basketball-reference.com/teams/BOS/
 
-Introducing rvest!
-========================================================
-- `rvest` works like magic
 

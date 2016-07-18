@@ -59,4 +59,25 @@ https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
 
 ```
 
+## Fun, interesting relationships!
+
+```{r}
+# Try visualizing relationships using plot!
+## For example, plot(full.dat$age,full.dat$runny) or plot(age,runny, data=full.dat)
+
+# To see if there's a difference between two groups, 
+# try group_by and summarize the variable of interest!
+
+
+```
+
+
 # Case Study 2: NBA
+
+```{r}
+library(XML)
+
+
+```
+
+
