@@ -1,15 +1,20 @@
-data management and web scraping
+data management and web scraping in R
 ========================================================
 author: katie leap and stephen lauer
 date: 7/19/16
 
 Sponsors
 ========================================================
-[![Graduate Women In STEM](gwis-logo.png)](http://blogs.umass.edu/gwis/)
 
-[![Graduate Researchers in Data](grid-logo.png)](http://gridclub.io/)
+[<img src="mass-mutual-logo.png" alt="Mass Mutual Financial Group" style="height: 150px;"/>](https://www.massmutual.com/)
 
 [Western Mass Statistics and Data Science Meetup](http://www.meetup.com/Pioneer-Valley-and-Five-College-R-Statistical-Meetup/)
+
+***
+
+[<img src="gwis-logo.png" alt="Graduate Women In STEM" style="height: 150px;"/>](http://blogs.umass.edu/gwis/)
+
+[<img src="grid-logo.png" alt="Graduate Researchers in Data" style="height: 150px;"/>](http://gridclub.io/)
 
 Data Extraction
 ========================================================
@@ -409,12 +414,17 @@ IMDB Web Scrape Activities
 ========================================================
 - Find which years have had the most "robot movies"
 - Use `grep` to find which descriptions contain robot words ("robot", "android", "AI", etc.) to filter out fake robot movies (X-Men Apocalyse, really?)
-- Find average rating of robot movies, as well as the lowest and highest rated ones
+- Find average rating of robot movies, overall and by year
 
 Thank You!
 ========================================================
-[![Graduate Women In STEM](gwis-logo.png)](http://blogs.umass.edu/gwis/)
 
-[![Graduate Researchers in Data](grid-logo.png)](http://gridclub.io/)
+[<img src="mass-mutual-logo.png" alt="Mass Mutual Financial Group" style="height: 150px;"/>](https://www.massmutual.com/)
 
 [Western Mass Statistics and Data Science Meetup](http://www.meetup.com/Pioneer-Valley-and-Five-College-R-Statistical-Meetup/)
+
+***
+
+[<img src="gwis-logo.png" alt="Graduate Women In STEM" style="height: 150px;"/>](http://blogs.umass.edu/gwis/)
+
+[<img src="grid-logo.png" alt="Graduate Researchers in Data" style="height: 150px;"/>](http://gridclub.io/)
