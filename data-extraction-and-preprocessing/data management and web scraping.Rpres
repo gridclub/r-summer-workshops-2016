@@ -33,7 +33,7 @@ Data Management
 Case Study 1: NHANES
 ========================================================
 - We'll get started with a public health dataset that we're going to find online right now
-- http://wwwn.cdc.gov/Nchs/Nhanes/Search/Nhanes13_14.aspx
+- [wwwn.cdc.gov/Nchs/Nhanes/Search/Nhanes13_14.aspx](http://wwwn.cdc.gov/Nchs/Nhanes/Search/Nhanes13_14.aspx)
 
 ```{r, message=FALSE, results='hide'}
 library(Hmisc)
@@ -59,7 +59,7 @@ Introducing dplyr!
   - `group_by()`
   - `summarize()`
   - `arrange()`
-- They all do what it sounds like they do
+- They all do what it sounds like they do (but we'll go through them anyways)
 
 But First!
 ========================================================
@@ -67,6 +67,7 @@ But First!
 - the pipe!
 - **%>%**
 - this handy little thing comes from the `magrittr` package
+- replaces the first argument in a function with the object before the pipe
 - it makes code a million times more readable
 - keyboard shortcut: **cmd-shift-M** (for **m**agrittr)
 
@@ -124,7 +125,7 @@ Back to Cleaning!
   - don't overwrite your original data
 
 ========================================================
-<center><img src="http://imgs.xkcd.com/comics/genetic_testing.png"/></center> 
+![Plus, now I know that I have risk factors for elbow dysplasia, heartworm, parvo, and mange.](http://imgs.xkcd.com/comics/genetic_testing.png)
 
 Mutants!
 ========================================================
@@ -141,7 +142,6 @@ demo <- demographics %>%
   mutate(gender=revalue(as.factor(gender), c("1"="male","2"="female")))
 summary(demo)
 ```
-
 
 Select : Columns :: Filter : Rows
 ========================================================
@@ -166,7 +166,6 @@ demo %>%
   summarize(mean.age = mean(age))
 ```
 - `summarize_each()`: multiple columns
-
 
 Grouping
 ========================================================
@@ -212,7 +211,7 @@ Why did we download two datasets?
 ========================================================
 - Because we can join them!
 - There are different joins depending on how you want to do it
-- I look them up every time: https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
+- I look them up every time: [data wrangling cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 But first!
 ========================================================
@@ -235,7 +234,8 @@ ts <- taste.smell %>%
 Left join!
 ========================================================
 ```{r}
-full.dat <- left_join(demo, ts, by = "id") # or your df name
+library(tidyr)
+full.dat <- left_join(demo, ts, by = "id")
 ```
 - Optional `by` statement
 - Can use more than one `by` variables as well
@@ -247,7 +247,7 @@ Have fun!
 - Take a snack break if you like
 - Let us know what you find!
   - Do old people smell funny?
-- Complete list of dplyr functions can be found on the [`dplyr` cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+- Complete list of `dplyr` functions can be found on the [data wrangling cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 Web Scraping
 ========================================================
@@ -256,8 +256,9 @@ Web Scraping
   - `XML`
   - `rvest`
 
-Case Study 2: NBA
+Case Study 2: Scraping Celtics statistics
 ========================================================
+Scraping an HTML table from [www.basketball-reference.com/teams/BOS/2016.html](http://www.basketball-reference.com/teams/BOS/2016.html)
 ```{r}
 library(XML)
 site <- "http://www.basketball-reference.com/teams/BOS/2016.html"
@@ -265,15 +266,16 @@ celtics_2016 <- readHTMLTable(site)
 celtics_players <- celtics_2016$per_game
 ```
 
-Case Study 2: NBA
+Highest scoring Celtics in 2016
 ========================================================
 ```{r, echo=F}
 celtics_players %>% 
   select(Player, Age, G, PTS) %>% 
+  arrange(desc(PTS)) %>% 
   head
 ```
 
-Case Study 2: NBA
+Looking at historical Celtics stats
 ========================================================
 ```{r, warnings=FALSE}
 years <- 1980:2013
@@ -287,7 +289,7 @@ for(year in years){
 }
 ```
 
-Case Study 2: NBA
+Highest scoring Celtics in a single season
 ========================================================
 ```{r,eval=FALSE}
 all_celtics %>% 
@@ -295,7 +297,7 @@ all_celtics %>%
   arrange(desc(as.numeric(PTS)))
 ```
 
-Case Study 2: NBA
+Highest scoring Celtics in a single season
 ========================================================
 ```{r,echo=FALSE}
 all_celtics %>% 
@@ -303,7 +305,7 @@ all_celtics %>%
   arrange(desc(as.numeric(PTS)))
 ```
 
-Case Study 2: NBA
+Highest scoring Celtics over career
 ========================================================
 ```{r,eval=FALSE}
 all_celtics %>% 
@@ -313,7 +315,7 @@ all_celtics %>%
   arrange(desc(PPG))
 ```
 
-Case Study 2: NBA
+Highest scoring Celtics over career
 ========================================================
 ```{r,echo=FALSE}
 all_celtics %>% 

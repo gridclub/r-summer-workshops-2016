@@ -3,6 +3,14 @@ data management and web scraping
 author: katie leap and stephen lauer
 date: 7/19/16
 
+Sponsors
+========================================================
+[![Graduate Women In STEM](gwis-logo.png)](http://blogs.umass.edu/gwis/)
+
+[![Graduate Researchers in Data](grid-logo.png)](http://gridclub.io/)
+
+[Western Mass Statistics and Data Science Meetup](http://www.meetup.com/Pioneer-Valley-and-Five-College-R-Statistical-Meetup/)
+
 Data Extraction
 ========================================================
 - With R, this isn't really a thing
@@ -25,7 +33,7 @@ Data Management
 Case Study 1: NHANES
 ========================================================
 - We'll get started with a public health dataset that we're going to find online right now
-- http://wwwn.cdc.gov/Nchs/Nhanes/Search/Nhanes13_14.aspx
+- [wwwn.cdc.gov/Nchs/Nhanes/Search/Nhanes13_14.aspx](http://wwwn.cdc.gov/Nchs/Nhanes/Search/Nhanes13_14.aspx)
 
 
 ```r
@@ -52,7 +60,7 @@ Introducing dplyr!
   - `group_by()`
   - `summarize()`
   - `arrange()`
-- They all do what it sounds like they do
+- They all do what it sounds like they do (but we'll go through them anyways)
 
 But First!
 ========================================================
@@ -60,6 +68,7 @@ But First!
 - the pipe!
 - **%>%**
 - this handy little thing comes from the `magrittr` package
+- replaces the first argument in a function with the object before the pipe
 - it makes code a million times more readable
 - keyboard shortcut: **cmd-shift-M** (for **m**agrittr)
 
@@ -129,7 +138,7 @@ Back to Cleaning!
   - don't overwrite your original data
 
 ========================================================
-<center><img src="http://imgs.xkcd.com/comics/genetic_testing.png"/></center> 
+![Plus, now I know that I have risk factors for elbow dysplasia, heartworm, parvo, and mange.](http://imgs.xkcd.com/comics/genetic_testing.png)
 
 Mutants!
 ========================================================
@@ -157,7 +166,6 @@ summary(demo)
  3rd Qu.:81188                 3rd Qu.:52.00  
  Max.   :83731                 Max.   :80.00  
 ```
-
 
 Select : Columns :: Filter : Rows
 ========================================================
@@ -191,7 +199,6 @@ demo %>%
 ```
 - `summarize_each()`: multiple columns
 
-
 Grouping
 ========================================================
 
@@ -205,14 +212,14 @@ head(group)
 Source: local data frame [6 x 3]
 Groups: gender [2]
 
-              id gender            age
-  <S3: labelled> <fctr> <S3: labelled>
-1          73557   male             69
-2          73558   male             54
-3          73559   male             72
-4          73560   male              9
-5          73561 female             73
-6          73562   male             56
+     id gender   age
+  (int) (fctr) (int)
+1 73557   male    69
+2 73558   male    54
+3 73559   male    72
+4 73560   male     9
+5 73561 female    73
+6 73562   male    56
 ```
 
 Arrange
@@ -245,9 +252,10 @@ demo %>%
 ```
 
 ```
-# A tibble: 2 x 2
+Source: local data frame [2 x 2]
+
   gender mean.age
-  <fctr>    <dbl>
+  (fctr)    (dbl)
 1   male 30.69159
 2 female 32.25077
 ```
@@ -271,7 +279,7 @@ Why did we download two datasets?
 ========================================================
 - Because we can join them!
 - There are different joins depending on how you want to do it
-- I look them up every time: https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
+- I look them up every time: [data wrangling cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 But first!
 ========================================================
@@ -287,7 +295,8 @@ Left join!
 ========================================================
 
 ```r
-full.dat <- left_join(demo, ts, by = "id") # or your df name
+library(tidyr)
+full.dat <- left_join(demo, ts, by = "id")
 ```
 - Optional `by` statement
 - Can use more than one `by` variables as well
@@ -299,6 +308,7 @@ Have fun!
 - Take a snack break if you like
 - Let us know what you find!
   - Do old people smell funny?
+- Complete list of `dplyr` functions can be found on the [data wrangling cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 Web Scraping
 ========================================================
@@ -307,8 +317,9 @@ Web Scraping
   - `XML`
   - `rvest`
 
-Case Study 2: NBA
+Case Study 2: Scraping Celtics statistics
 ========================================================
+Scraping an HTML table from [www.basketball-reference.com/teams/BOS/2016.html](http://www.basketball-reference.com/teams/BOS/2016.html)
 
 ```r
 library(XML)
@@ -317,20 +328,20 @@ celtics_2016 <- readHTMLTable(site)
 celtics_players <- celtics_2016$per_game
 ```
 
-Case Study 2: NBA
+Highest scoring Celtics in 2016
 ========================================================
 
 ```
-           Player Age  G  PTS
-1   Avery Bradley  25 76 15.2
-2   Isaiah Thomas  26 82 22.2
-3     Jae Crowder  25 73 14.2
-4     Evan Turner  27 81 10.5
-5    Marcus Smart  21 61  9.1
-6 Jared Sullinger  23 81 10.3
+         Player Age  G  PTS
+1  Marcus Smart  21 61  9.1
+2  Amir Johnson  28 79  7.3
+3     David Lee  32 30  7.1
+4  Tyler Zeller  26 60  6.1
+5 Jonas Jerebko  28 78  4.4
+6 Isaiah Thomas  26 82 22.2
 ```
 
-Case Study 2: NBA
+Looking at historical Celtics stats
 ========================================================
 
 ```r
@@ -345,33 +356,55 @@ for(year in years){
 }
 ```
 
-Case Study 2: NBA
+Highest scoring Celtics in a single season
+========================================================
+
+```r
+all_celtics %>% 
+  select(Player, Year, PTS) %>% 
+  arrange(desc(as.numeric(PTS)))
+```
+
+Highest scoring Celtics in a single season
+========================================================
+
+```
+Source: local data frame [544 x 3]
+
+         Player  Year   PTS
+          (chr) (int) (chr)
+1    Larry Bird  1988  29.9
+2    Larry Bird  1985  28.7
+3    Larry Bird  1987  28.1
+4   Paul Pierce  2006  26.8
+5  Kevin McHale  1987  26.1
+6   Paul Pierce  2002  26.1
+7   Paul Pierce  2003  25.9
+8    Larry Bird  1986  25.8
+9   Paul Pierce  2001  25.3
+10  Paul Pierce  2007  25.0
+..          ...   ...   ...
+```
+
+Highest scoring Celtics over career
 ========================================================
 
 ```r
 all_celtics %>% 
   group_by(Player) %>% 
-  summarize(PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
+  summarize(Games=sum(as.numeric(G)),             
+            PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
   arrange(desc(PPG))
 ```
 
-Case Study 2: NBA
-========================================================
-
-```r
-all_celtics %>% 
-  group_by(Player) %>% 
-  summarize(PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
-  arrange(desc(PPG))
-```
-
-Case Study 2: NBA
+Highest scoring Celtics over career
 ========================================================
 
 ```
-# A tibble: 242 x 3
+Source: local data frame [242 x 3]
+
               Player Games      PPG
-               <chr> <dbl>    <dbl>
+               (chr) (dbl)    (dbl)
 1         Larry Bird   897 24.30234
 2        Paul Pierce  1102 21.81053
 3     Antoine Walker   552 20.62083
@@ -382,7 +415,7 @@ Case Study 2: NBA
 8         Dino Radja   224 16.68437
 9      Robert Parish  1106 16.48300
 10       Ricky Davis   181 16.26022
-# ... with 232 more rows
+..               ...   ...      ...
 ```
 
 `rvest` and the SelectorGadget
@@ -392,8 +425,11 @@ Case Study 2: NBA
 ```r
 library(rvest)
 ```
-- [selectorgadget.com](http://selectorgadget.com/)
+- Download the selector gadget at [selectorgadget.com](http://selectorgadget.com/)
 
+IMDB Web Scrape
+========================================================
+[IMDB's Top 100 "Robot Movies"](http://www.imdb.com/search/title?count=100&keywords=robot&num_votes=3000,&title_type=feature&ref_=gnr_kw_ro)
 
 ```r
 imdb <- read_html("http://www.imdb.com/search/title?count=100&keywords=robot&num_votes=3000,&title_type=feature&ref_=gnr_kw_ro")
@@ -401,28 +437,93 @@ imdb <- read_html("http://www.imdb.com/search/title?count=100&keywords=robot&num
 descriptions <- imdb %>% 
   html_nodes(".outline") %>% 
   html_text()
+```
+IMDB Web Scrape
+========================================================
 
+```r
+descriptions[[1]]
+```
+
+```
+[1] "After the re-emergence of the world's first mutant, world-destroyer Apocalypse, the X-Men must unite to defeat his extinction level plan."
+```
+
+IMDB Web Scrape
+========================================================
+
+```r
 rating <- imdb %>% 
   html_nodes(".value") %>% 
   html_text() %>% 
   as.numeric
+```
 
+IMDB Web Scrape
+========================================================
+
+```r
+head(rating)
+```
+
+```
+[1] 7.4 8.2 8.2 6.6 8.6 7.5
+```
+
+IMDB Web Scrape
+========================================================
+
+```r
 year <- imdb %>% 
   html_nodes(".year_type") %>% 
   html_text() %>% 
   gsub(pattern="\\(",replacement="") %>% 
   gsub(pattern="\\)",replacement="") %>% 
   as.numeric
+```
 
+IMDB Web Scrape
+========================================================
+
+```r
+head(year)
+```
+
+```
+[1] 2016 2016 2015 2015 2014 2015
+```
+
+IMDB Web Scrape
+========================================================
+
+```r
 title <- imdb %>% 
   html_nodes(".title") %>% 
   html_text()
 
 title2 <- unlist(strsplit(title,"\n    \n\n\n\n    "))[seq(from=2,to=length(title),by=2)]
 title3 <- unlist(strsplit(title2,"\n    \\("))[seq(from=1,to=length(title),by=2)]
+```
 
+IMDB Web Scrape
+========================================================
+
+```r
+head(title3)
+```
+
+```
+[1] "X-Men: Apocalypse"            "Captain America: Civil War"  
+[3] "Star Wars: The Force Awakens" "Terminator Genisys"          
+[5] "Interstellar"                 "Avengers: Age of Ultron"     
+```
+
+IMDB Web Scrape
+========================================================
+
+```r
 robot.movies <- data.frame(title=title3,year,rating)
-head(arrange(robot.movies,desc(rating)))
+head(arrange(robot.movies,desc(rating)),4)
 ```
 
 ```
@@ -431,7 +532,18 @@ head(arrange(robot.movies,desc(rating)))
 2                                     The Matrix 1999    8.7
 3             Star Wars: Episode IV - A New Hope 1977    8.7
 4                                   Interstellar 2014    8.6
-5                                          Alien 1979    8.5
-6                     Terminator 2: Judgment Day 1991    8.5
 ```
 
+IMDB Web Scrape Activities
+========================================================
+- Find which years have had the most "robot movies"
+- Use `grep` to find which descriptions contain robot words ("robot", "android", "AI", etc.) to filter out fake robot movies (X-Men Apocalyse, really?)
+- Find average rating of robot movies, as well as the lowest and highest rated ones
+
+Thank You!
+========================================================
+[![Graduate Women In STEM](gwis-logo.png)](http://blogs.umass.edu/gwis/)
+
+[![Graduate Researchers in Data](grid-logo.png)](http://gridclub.io/)
+
+[Western Mass Statistics and Data Science Meetup](http://www.meetup.com/Pioneer-Valley-and-Five-College-R-Statistical-Meetup/)
