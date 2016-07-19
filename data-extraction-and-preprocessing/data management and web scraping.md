@@ -16,14 +16,20 @@ Sponsors
 
 [<img src="grid-logo.png" alt="Graduate Researchers in Data" style="height: 150px;"/>](http://gridclub.io/)
 
+Github location
+========================================================
+All slides and workshop materials can be found at:
+[https://github.com/gridclub/r-summer-workshops-2016](https://github.com/gridclub/r-summer-workshops-2016)
+
 Data Extraction
 ========================================================
 - With R, this isn't really a thing
-- `read.csv` will read in csv files
+- `read.csv()` will read in csv files
   - very easy syntax, used most frequently
 - In this workshop, we'll cover two other methods
   - Importing SAS files
   - Scraping HTML tables from the internet
+  - Scraping any HTML or XML object from the internet
 
 Data Management
 ========================================================
@@ -246,7 +252,6 @@ head(arrange)
 6 73563   male   0
 ```
 
-
 Divide and Conquer!
 ========================================================
 
@@ -264,7 +269,6 @@ Source: local data frame [2 x 2]
 1   male 30.69159
 2 female 32.25077
 ```
-
 
 Freebie: Summarize function examples
 ========================================================
