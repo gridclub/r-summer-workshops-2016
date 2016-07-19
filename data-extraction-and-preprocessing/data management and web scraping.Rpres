@@ -313,3 +313,34 @@ all_celtics %>%
 library(rvest)
 ```
 - [selectorgadget.com](http://selectorgadget.com/)
+
+```{r}
+imdb <- read_html("http://www.imdb.com/search/title?count=100&keywords=robot&num_votes=3000,&title_type=feature&ref_=gnr_kw_ro")
+
+descriptions <- imdb %>% 
+  html_nodes(".outline") %>% 
+  html_text()
+
+rating <- imdb %>% 
+  html_nodes(".value") %>% 
+  html_text() %>% 
+  as.numeric
+
+year <- imdb %>% 
+  html_nodes(".year_type") %>% 
+  html_text() %>% 
+  gsub(pattern="\\(",replacement="") %>% 
+  gsub(pattern="\\)",replacement="") %>% 
+  as.numeric
+
+title <- imdb %>% 
+  html_nodes(".title") %>% 
+  html_text()
+
+title2 <- unlist(strsplit(title,"\n    \n\n\n\n    "))[seq(from=2,to=length(title),by=2)]
+title3 <- unlist(strsplit(title2,"\n    \\("))[seq(from=1,to=length(title),by=2)]
+
+robot.movies <- data.frame(title=title3,year,rating)
+head(arrange(robot.movies,desc(rating)))
+```
+
