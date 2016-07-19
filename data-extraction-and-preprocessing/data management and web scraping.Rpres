@@ -14,7 +14,6 @@ Data Extraction
 
 Data Management
 ========================================================
-
 - Actually refers to a lot of things
   - some of them very technical with names like "data architecture"
 - We're using it just to refer to managing **data quality**
@@ -245,13 +244,72 @@ Web Scraping
 ========================================================
 - Refers to extracting information from websites
 - Really easy to do in R with the help of some packages
-  - `rvest`
   - `XML`
-- Data needs to be non-reactive (aka not javascript or flash (yuck))
-
+  - `rvest`
 
 Case Study 2: NBA
 ========================================================
-- http://www.basketball-reference.com/teams/BOS/
+```{r}
+library(XML)
+site <- "http://www.basketball-reference.com/teams/BOS/2016.html"
+celtics_2016 <- readHTMLTable(site)
+celtics_players <- celtics_2016$per_game
+```
 
+Case Study 2: NBA
+========================================================
+```{r, echo=F}
+celtics_players %>% 
+  select(Player, Age, G, PTS) %>% 
+  head
+```
 
+Case Study 2: NBA
+========================================================
+```{r, warnings=FALSE}
+years <- 1980:2013
+all_celtics <- c()
+for(year in years){
+  site <- paste0("http://www.basketball-reference.com/teams/BOS/", year, ".html")
+  celtics_one_year <- readHTMLTable(site)
+  one_year_players <- celtics_one_year$per_game
+  one_year_players$Year <- year
+  all_celtics <- bind_rows(all_celtics, one_year_players)
+}
+```
+
+Case Study 2: NBA
+========================================================
+```{r,eval=FALSE}
+all_celtics %>% 
+  group_by(Player) %>% 
+  summarize(PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
+  arrange(desc(PPG))
+```
+
+Case Study 2: NBA
+========================================================
+```{r,eval=FALSE}
+all_celtics %>% 
+  group_by(Player) %>% 
+  summarize(PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
+  arrange(desc(PPG))
+```
+
+Case Study 2: NBA
+========================================================
+```{r,echo=FALSE}
+all_celtics %>% 
+  group_by(Player) %>% 
+  summarize(Games=sum(as.numeric(G)),             
+            PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
+  arrange(desc(PPG))
+```
+
+`rvest` and the SelectorGadget
+========================================================
+- Load up `rvest`
+```{r}
+library(rvest)
+```
+- [selectorgadget.com](http://selectorgadget.com/)
