@@ -3,6 +3,14 @@ data management and web scraping
 author: katie leap and stephen lauer
 date: 7/19/16
 
+Sponsors
+========================================================
+[![Graduate Women In STEM](gwis-logo.png)](http://blogs.umass.edu/gwis/)
+
+[![Graduate Researchers in Data](grid-logo.png)](http://gridclub.io/)
+
+[Western Mass Statistics and Data Science Meetup](http://www.meetup.com/Pioneer-Valley-and-Five-College-R-Statistical-Meetup/)
+
 Data Extraction
 ========================================================
 - With R, this isn't really a thing
@@ -239,6 +247,7 @@ Have fun!
 - Take a snack break if you like
 - Let us know what you find!
   - Do old people smell funny?
+- Complete list of dplyr functions can be found on the [`dplyr` cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
 Web Scraping
 ========================================================
@@ -282,9 +291,16 @@ Case Study 2: NBA
 ========================================================
 ```{r,eval=FALSE}
 all_celtics %>% 
-  group_by(Player) %>% 
-  summarize(PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
-  arrange(desc(PPG))
+  select(Player, Year, PTS) %>% 
+  arrange(desc(as.numeric(PTS)))
+```
+
+Case Study 2: NBA
+========================================================
+```{r,echo=FALSE}
+all_celtics %>% 
+  select(Player, Year, PTS) %>% 
+  arrange(desc(as.numeric(PTS)))
 ```
 
 Case Study 2: NBA
@@ -292,7 +308,8 @@ Case Study 2: NBA
 ```{r,eval=FALSE}
 all_celtics %>% 
   group_by(Player) %>% 
-  summarize(PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
+  summarize(Games=sum(as.numeric(G)),             
+            PPG=weighted.mean(as.numeric(PTS), as.numeric(G))) %>% 
   arrange(desc(PPG))
 ```
 
@@ -314,33 +331,88 @@ library(rvest)
 ```
 - Download the selector gadget at [selectorgadget.com](http://selectorgadget.com/)
 
+IMDB Web Scrape
+========================================================
+[IMDB's Top 100 "Robot Movies"](http://www.imdb.com/search/title?count=100&keywords=robot&num_votes=3000,&title_type=feature&ref_=gnr_kw_ro)
 ```{r}
 imdb <- read_html("http://www.imdb.com/search/title?count=100&keywords=robot&num_votes=3000,&title_type=feature&ref_=gnr_kw_ro")
 
 descriptions <- imdb %>% 
   html_nodes(".outline") %>% 
   html_text()
+```
+IMDB Web Scrape
+========================================================
+```{r}
+descriptions[[1]]
+```
 
+IMDB Web Scrape
+========================================================
+```{r}
 rating <- imdb %>% 
   html_nodes(".value") %>% 
   html_text() %>% 
   as.numeric
+```
 
+IMDB Web Scrape
+========================================================
+```{r}
+head(rating)
+```
+
+IMDB Web Scrape
+========================================================
+```{r}
 year <- imdb %>% 
   html_nodes(".year_type") %>% 
   html_text() %>% 
   gsub(pattern="\\(",replacement="") %>% 
   gsub(pattern="\\)",replacement="") %>% 
   as.numeric
+```
 
+IMDB Web Scrape
+========================================================
+```{r}
+head(year)
+```
+
+IMDB Web Scrape
+========================================================
+```{r}
 title <- imdb %>% 
   html_nodes(".title") %>% 
   html_text()
 
 title2 <- unlist(strsplit(title,"\n    \n\n\n\n    "))[seq(from=2,to=length(title),by=2)]
 title3 <- unlist(strsplit(title2,"\n    \\("))[seq(from=1,to=length(title),by=2)]
-
-robot.movies <- data.frame(title=title3,year,rating)
-head(arrange(robot.movies,desc(rating)))
 ```
 
+IMDB Web Scrape
+========================================================
+```{r}
+head(title3)
+```
+
+IMDB Web Scrape
+========================================================
+```{r}
+robot.movies <- data.frame(title=title3,year,rating)
+head(arrange(robot.movies,desc(rating)),4)
+```
+
+IMDB Web Scrape Activities
+========================================================
+- Find which years have had the most "robot movies"
+- Use `grep` to find which descriptions contain robot words ("robot", "android", "AI", etc.) to filter out fake robot movies (X-Men Apocalyse, really?)
+- Find average rating of robot movies, as well as the lowest and highest rated ones
+
+Thank You!
+========================================================
+[![Graduate Women In STEM](gwis-logo.png)](http://blogs.umass.edu/gwis/)
+
+[![Graduate Researchers in Data](grid-logo.png)](http://gridclub.io/)
+
+[Western Mass Statistics and Data Science Meetup](http://www.meetup.com/Pioneer-Valley-and-Five-College-R-Statistical-Meetup/)
