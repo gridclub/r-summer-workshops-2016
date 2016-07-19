@@ -312,7 +312,7 @@ all_celtics %>%
 ```{r}
 library(rvest)
 ```
-- [selectorgadget.com](http://selectorgadget.com/)
+- Download the selector gadget at [selectorgadget.com](http://selectorgadget.com/)
 
 ```{r}
 imdb <- read_html("http://www.imdb.com/search/title?count=100&keywords=robot&num_votes=3000,&title_type=feature&ref_=gnr_kw_ro")

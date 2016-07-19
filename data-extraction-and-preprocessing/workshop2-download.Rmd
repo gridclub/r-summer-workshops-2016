@@ -31,7 +31,8 @@ demo <- demographics %>%
 
 ```{r}
 # look for missing data, out-of-range data and data using summary
-summary()
+
+# summary()
 ```
 
 Is anything missing? Why? Is it a problem?
@@ -72,12 +73,26 @@ https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
 ```
 
 
-# Case Study 2: NBA
+# HTML Table extraction
+
+Use `readHTMLTable()` to download a table from the internet! (site suggestions: [baseball-reference.com](http://www.baseball-reference.com/), [US News and World Report University rankings](http://colleges.usnews.rankingsandreviews.com/best-colleges/rankings/national-universities/data), [Historical weather](https://www.wunderground.com/history/) )
 
 ```{r}
 library(XML)
 
-
+# readHTMLTable()
 ```
 
+# `rvest` with SelectorGadget
 
+Use SelectorGadget to rip data from just about any website!
+
+```{r}
+library(rvest)
+
+# read_html()
+
+# html_nodes()
+
+# html_text()
+```
